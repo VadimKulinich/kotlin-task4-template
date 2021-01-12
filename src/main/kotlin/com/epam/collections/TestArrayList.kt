@@ -3,8 +3,6 @@ package com.epam.collections
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class TestArrayList<V: Any>() : MutableList<V?> {
 
-    override val size: Int = 0
-
     override fun contains(element: V?): Boolean = false
 
     override fun containsAll(elements: Collection<V?>): Boolean = false
