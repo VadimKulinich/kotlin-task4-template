@@ -21,11 +21,12 @@ package com.epam.task1
  *          in case weight of the animal is greater than argument provided in function
  */
 class Zoo {
+
+    fun getAllAnimals(): List<Animal> = TODO("Return animals in the Zoo")
+
     companion object {
         fun create(animalsLimit: Int, weightLimit: Double): Zoo {
             TODO("Create Zoo object")
         }
     }
-
-    fun getAllAnimals(): List<Animal> = TODO("Return animals in the Zoo")
 }

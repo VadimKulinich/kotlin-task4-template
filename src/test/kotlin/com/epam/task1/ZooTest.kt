@@ -6,10 +6,10 @@ import org.junit.Test
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
-
 class ZooTest {
 
     private lateinit var outputStream: ByteArrayOutputStream
+    private val nextLine = System.lineSeparator()
 
     @Before
     fun setup() {
@@ -143,6 +143,20 @@ class ZooTest {
         zoo -= 1
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun remove_from_zoo_by_index_empty_zoo() {
+        val zoo = Zoo.create(1, 10.0)
+        zoo -= 0
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun remove_from_zoo_by_negative_index() {
+        val zoo = Zoo.create(-2, 10.0)
+        val animal = Animal("some name", 10.0)
+        zoo += animal
+        zoo -= -1
+    }
+
     @Test
     fun invoke_zoo_no_results() {
         val zoo = Zoo.create(1, 10.0)
@@ -158,7 +172,7 @@ class ZooTest {
         zoo += animal
         zoo.invoke()
         val output = String(outputStream.toByteArray())
-        val expected = "${animal.name} fed completed\n"
+        val expected = "${animal.name} fed completed$nextLine"
         assertEquals(output, expected)
     }
 
@@ -171,7 +185,7 @@ class ZooTest {
         zoo += animal2
         zoo.invoke()
         val output = String(outputStream.toByteArray())
-        val expected = "${animal1.name} fed completed\n${animal2.name} fed completed\n"
+        val expected = "${animal1.name} fed completed$nextLine${animal2.name} fed completed$nextLine"
         assertEquals(output, expected)
     }
 
@@ -184,7 +198,7 @@ class ZooTest {
         zoo += animal2
         zoo.invoke(5.0)
         val output = String(outputStream.toByteArray())
-        val expected = "${animal1.name}\n${animal2.name}\n"
+        val expected = "${animal1.name}$nextLine${animal2.name}$nextLine"
         assertEquals(output, expected)
     }
 

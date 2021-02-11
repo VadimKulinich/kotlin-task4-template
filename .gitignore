@@ -1,5 +1,6 @@
 # Intellij
 .idea/
+build/
 
 # IntelliJ
 out/

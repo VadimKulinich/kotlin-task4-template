@@ -12,6 +12,7 @@ class StringToFileDelegateTest {
 
     private lateinit var outputStream: ByteArrayOutputStream
     private lateinit var file: File
+    private val nextLine = System.lineSeparator()
 
     @Before
     fun setup() {
@@ -37,7 +38,7 @@ class StringToFileDelegateTest {
         val delegatedString by StringToFileDelegate(file)
         // imitate access to delegated value
         delegatedString.length
-        assertEquals("return from file\n", String(outputStream.toByteArray()))
+        assertEquals("return from file$nextLine", String(outputStream.toByteArray()))
     }
 
     @Test
@@ -49,7 +50,7 @@ class StringToFileDelegateTest {
         outputStream.reset()
         // imitate second access
         delegatedString.length
-        assertEquals("return from cache\n", String(outputStream.toByteArray()))
+        assertEquals("return from cache$nextLine", String(outputStream.toByteArray()))
     }
 
     @Test
@@ -87,17 +88,22 @@ class StringToFileDelegateTest {
         var delegatedString by StringToFileDelegate(file)
         // imitate set
         delegatedString = text
-        assertEquals("save to file\n", String(outputStream.toByteArray()))
+        assertEquals("save to file$nextLine", String(outputStream.toByteArray()))
     }
 
     @Test
     fun write_to_file_check_cache_dropped() {
         val text = "some value"
         var delegatedString by StringToFileDelegate(file)
-        // imitate set
-        delegatedString = text
-        // imitate get
+        // imitate get cache added
         delegatedString.length
-        assertEquals("save to file\nreturn from file\n", String(outputStream.toByteArray()))
+        // imitate set drop cache
+        delegatedString = text
+        // imitate get read from file init cache
+        delegatedString.length
+        assertEquals(
+                "return from file${nextLine}save to file${nextLine}return from file$nextLine",
+                String(outputStream.toByteArray())
+        )
     }
 }
